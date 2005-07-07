@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HEAD></HEAD><HTML><BODY>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package affyQCReport:  Contents">
+<param name="Local" value="00Index.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package affyQCReport:  R objects">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="borderQC1">
+<param name="Local" value="borderQC1.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="borderQC2">
+<param name="Local" value="borderQC2.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="correlationPlot">
+<param name="Local" value="correlationPlot.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="QCReport">
+<param name="Local" value="QCReport.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="QCReport-correlationPlot">
+<param name="Local" value="correlationPlot.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="QCReport-signalDist">
+<param name="Local" value="signalDist.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="QCReport-titlePage">
+<param name="Local" value="titlePage.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="signalDist">
+<param name="Local" value="signalDist.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="titlePage">
+<param name="Local" value="titlePage.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package affyQCReport:  Titles">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="borderQC1">
+<param name="Local" value="borderQC1.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="BorderQC2">
+<param name="Local" value="borderQC2.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="correlationPlot">
+<param name="Local" value="correlationPlot.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="QCReport">
+<param name="Local" value="QCReport.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="signalDist">
+<param name="Local" value="signalDist.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="titlePage">
+<param name="Local" value="titlePage.html">
+</OBJECT>
+</UL>
+</UL>
+</BODY></HTML>
