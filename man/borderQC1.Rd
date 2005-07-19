@@ -1,6 +1,6 @@
 \name{borderQC1}
 \alias{borderQC1}
-\title{borderQC1}
+\title{Distribution of intensities of the border elements}
 \description{
 Creates the forth page of the QC report created by \code{\link[affyQCReport:QCReport]{QCReport}} for an object of class
 \code{\link[affy:AffyBatch-class]{AffyBatch}}   The page contains a boxplots showing the intensities from the border element of arrays in an \code{\link[affy:AffyBatch-class]{AffyBatch}}  object.

@@ -1,6 +1,6 @@
 \name{QCReport}
 \alias{QCReport}
-\title{QCReport}
+\title{QC Report for AffyBatch objects}
 \description{
 Creates a QC report for an object of class
 \code{\link[affy:AffyBatch-class]{AffyBatch}}. 

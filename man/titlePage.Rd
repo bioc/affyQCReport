@@ -1,7 +1,7 @@
 \name{titlePage}
 \alias{titlePage}
 \alias{QCReport-titlePage}
-\title{titlePage}
+\title{QC report title page with array names}
 \description{
 Creates the titlepage of the  QC report created by \code{\link[affyQCReport:QCReport]{QCReport}} for an object of class
 \code{\link[affy:AffyBatch-class]{AffyBatch}}.

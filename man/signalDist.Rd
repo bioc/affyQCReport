@@ -1,7 +1,7 @@
 \name{signalDist}
 \alias{signalDist}
 \alias{QCReport-signalDist}
-\title{signalDist}
+\title{Intensity distribution plots for a AffyBatch object}
 \description{
 Creates the secondpage of the  QC report created by \code{\link[affyQCReport:QCReport]{QCReport}} for an object of class
 \code{\link[affy:AffyBatch-class]{AffyBatch}}   The page contains a boxplot and intensity distribution plots.

@@ -1,7 +1,7 @@
 \name{correlationPlot}
 \alias{correlationPlot}
 \alias{QCReport-correlationPlot}
-\title{correlationPlot}
+\title{Array-array intensity correlation plot}
 \description{
 Creates the sixth page of the QC report created by   \code{\link[affyQCReport:QCReport]{QCReport}} 
              for an object of class
