@@ -3,12 +3,12 @@ Version: 1.13.1
 Title: QC Report Generation for affyBatch objects
 Author: Craig Parman <craig.parman@bifx.org>, Conrad Halling <conrad.halling@bifx.org>, Robert Gentleman
 Maintainer: Craig Parman <craig.parman@bifx.org>
-Depends: Biobase, affy, simpleaffy
+Depends: Biobase, affy, simpleaffy, xtable
 Suggests: tkWidgets (>= 1.5.23), affydata (>= 1.4.1)
 Description: This package creates a QC report for an AffyBatch object.
   The report is intended to allow the user to quickly assess the quality
   of a set of arrays in an AffyBatch object.
 License: LGPL version 2 or newer
 biocViews: Microarray,OneChannel,QualityControl
-Collate: arrayReport.R correlation.R border1.R border2.R titlepage.R signaldist.R
+Collate: arrayReport.R correlation.R border1.R border2.R titlepage.R signaldist.R affyQAReport.R
 
