@@ -2,6 +2,9 @@
 ## could simply process that - but I think this will give us better
 ## ways to handle the errors
 
+ rmQAReport = function(outdir=file.path(tempdir(), "affyQA"))
+    unlinK(outdir, recursive=TRUE)
+
  affyQAReport <- function(affyB, output = "pdf",
      outdir=file.path(tempdir(), "affyQA"), 
      repName=deparse(substitute(affyB)) ) {
@@ -26,11 +29,17 @@
   
    dfout = data.frame(AvBg = avbg(qcStats), ScaleF=sfs(qcStats),
       PerCPres=percent.present(qcStats))
+
    tab1 = xtable(dfout)
+   tcon = textConnection("TAB1", "w", local=TRUE)
+   print(tab1, file=tcon)
+   close(tcon)
 
    tab2 = xtable(ratios(qcStats))
+   tcon = textConnection("TAB2", "w", local=TRUE)
+   print(tab2, file=tcon)
+   close(tcon)
 
-   
    pdf(file=outf$sA)
    plot(qcStats)
    dev.off()
@@ -72,7 +81,7 @@
    pkVers =  packageDescription("affyQCReport")$Version
    sessInfo = toLatex(sessionInfo())
 
-   symVals = c(repName=repName, outfiles, TABLE1=tab1, TABLE2=tab2,
+   symVals = c(repName=repName, outfiles, TABLE1=TAB1, TABLE2=TAB2,
          affQCVersNO= pkVers, sessionInfo=sessInfo )
 
    outFile = file.path(outdir, paste(repName, ".tex", sep=""))
