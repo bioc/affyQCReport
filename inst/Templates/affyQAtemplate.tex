@@ -1,0 +1,43 @@
+\documentclass{article}
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textsf{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+
+\begin{document}
+
+\title{Quality Report for Affymetrix Microarray Experiments}
+
+\maketitle
+
+This is a QA report for the dataset @inputdata@.
+
+\begin{figure}[tp]
+  \centering
+\includegraphics{@sA@}
+
+\caption{\label{fig:sA}%
+simpleaffy QC diagnostic plot.}
+\end{figure}
+
+\begin{figure}[tp]
+  \centering
+\includegraphics{@hist@}
+
+\caption{\label{fig:sA}%
+affy histograms.}
+\end{figure}
+
+\begin{figure}[tp]
+  \centering
+\includegraphics{@bxp@}
+
+\caption{\label{fig:sA}%
+affy boxplot.}
+\end{figure}
+
+
+\end{document}
