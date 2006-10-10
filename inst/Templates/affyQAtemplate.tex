@@ -19,6 +19,19 @@
 
 This is a QA report for the dataset @repName@.
 
+@TABLE1@
+
+In Table 1 we see both the average background and the scale factors for each
+array.  The average background values should be similar to each other, 
+across arrays, as should the scale factors. Scale factors should be within
+a factor of 3 of each other.
+
+
+@TABLE2@
+
+
+
+
 \begin{figure}[tp]
   \centering
 \includegraphics{@sA@}
@@ -30,18 +43,23 @@ simpleaffy QC diagnostic plot.}
 \begin{figure}[tp]
   \centering
 \includegraphics{@hist@}
-
-\caption{\label{fig:sA}%
+\caption{\label{fig:hist}%
 affy histograms.}
 \end{figure}
 
 \begin{figure}[tp]
   \centering
 \includegraphics{@bxp@}
-
-\caption{\label{fig:sA}%
+\caption{\label{fig:bxp}%
 affy boxplot.}
 \end{figure}
 
+
+\begin{figure}[tp]
+  \centering
+\includegraphics{@RNAdeg@}
+\caption{\label{fig:rnadeg}%
+RNA digestion/degredation plot.}
+\end{figure}
 
 \end{document}
