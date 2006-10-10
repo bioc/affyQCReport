@@ -3,7 +3,7 @@
 ## ways to handle the errors
 
  rmQAReport = function(outdir=file.path(tempdir(), "affyQA"))
-    unlinK(outdir, recursive=TRUE)
+    unlink(outdir, recursive=TRUE)
 
  affyQAReport <- function(affyB, output = "pdf",
      outdir=file.path(tempdir(), "affyQA"), 
@@ -34,11 +34,13 @@
    tcon = textConnection("TAB1", "w", local=TRUE)
    print(tab1, file=tcon)
    close(tcon)
+   TAB1 = paste(TAB1, collapse="\n")
 
    tab2 = xtable(ratios(qcStats))
    tcon = textConnection("TAB2", "w", local=TRUE)
    print(tab2, file=tcon)
    close(tcon)
+   TAB2 = paste(TAB2, collapse="\n")
 
    pdf(file=outf$sA)
    plot(qcStats)
