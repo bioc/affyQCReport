@@ -36,11 +36,21 @@
    close(tcon)
    TAB1 = paste(TAB1, collapse="\n")
 
-   tab2 = xtable(ratios(qcStats), label="table2")
+   tab2 = xtable(t(ratios(qcStats)), label="table2")
    tcon = textConnection("TAB2", "w", local=TRUE)
    print(tab2, file=tcon)
    close(tcon)
    TAB2 = paste(TAB2, collapse="\n")
+
+   biobOut = data.frame(BioB = getBioB(qcStats), BioC=getBioC(qcStats),
+       BioD = getBioD(qcStats), CreX = getCreX(qcStats))
+
+   tab3 = xtable(biobOut, label="table3", caption="BioB and friends")
+   tcon = textConnection("TAB3", "w", local=TRUE)
+   print(tab3, file=tcon)
+   close(tcon)
+   TAB3 = paste(TAB3, collapse="\n")
+
 
    pdf(file=outf$sA)
    plot(qcStats)
@@ -57,7 +67,7 @@
    ##RNA degredation plot
    rnaDeg = AffyRNAdeg(affyB)
    pdf(file=outf$RNAdeg)
-   plotAffyRNAdeg(rnaDeg, col=1)
+   plotAffyRNAdeg(rnaDeg, cols=1)
    dev.off()
 
    ##affyPLM stuff
@@ -67,12 +77,12 @@
 
   pdf(file=outf$RLE)
   Mbox(dataPLM, ylim = c(-1, 1), names = NULL, col="lightblue",
-   whisklty=0, staplelty=0)
+   whisklty=0, staplelty=0, main="RLE")
   dev.off()
 
    pdf(file=outf$NUSE)
    boxplot(dataPLM, ylim = c(0.95, 1.5), names = NULL,
-        outline = FALSE, col="lightblue")
+        outline = FALSE, col="lightblue", main="NUSE")
    dev.off()
 
    ##write the LaTeX
@@ -84,6 +94,7 @@
    sessInfo = paste(toLatex(sessionInfo()), collapse="\n")
 
    symVals = c(repName=repName, outfiles, TABLE1=TAB1, TABLE2=TAB2,
+         TABLE3=TAB3,
          affyQCVersNO= pkVers, sessionInfo=sessInfo )
 
    outFile = file.path(outdir, paste(repName, ".tex", sep=""))

@@ -41,6 +41,16 @@ a factor of 3 of each other.
 In Table~\ref{table2} ratios of hybridization efficiency, between 3' and
 5' situated probes sets are presented. These should all be less than 3.
 
+Additional, labelled cRNAs, are sometimes added during sample preparation. 
+These are BioB, BioC, BioD and CreX and are derived from Bacillus subtiliis 
+and nothing else should bind to their probesets. The results for these
+quantities are reported in Table\ref{table3}. It is intended that BioB be spiked
+in at the lower limit of detection and that BioC, BioD and CreX be
+spiked in at higher concentrations. If BioB is routinely absent, then there
+may be a problem with sensitivity.
+
+@TABLE3@
+
 These results are also summarized in Figure~\ref{fig:sA}. Any QA statistic
 that is shown in red is out of the manufacturer's specified boundaries
 and suggests a potential problem.
@@ -101,6 +111,15 @@ RNA digestion/degredation plot.}
 
 In this section we present diagnostic plots based on tools provided
 in the \Rpackage{affyPLM} package.
+
+Figure~\ref{fig:NUSE} is a Normalized Unscaled Standard Error (NUSE) 
+plot.  Low quality arrays are those that are significantly elevated or 
+more spread out, relative to the other arrays.
+NUSE values are not comparable across data sets.
+
+Figure~\ref{fig:RLE} is a Relative Log Expressin (RLE) plot
+and an array that has problems will either have larger spread, or 
+will not be centered at M = 0, or both.
 
 \begin{figure}[tp]
   \centering
