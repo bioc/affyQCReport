@@ -30,13 +30,13 @@
    dfout = data.frame(AvBg = avbg(qcStats), ScaleF=sfs(qcStats),
       PerCPres=percent.present(qcStats))
 
-   tab1 = xtable(dfout)
+   tab1 = xtable(dfout, label="table1")
    tcon = textConnection("TAB1", "w", local=TRUE)
    print(tab1, file=tcon)
    close(tcon)
    TAB1 = paste(TAB1, collapse="\n")
 
-   tab2 = xtable(ratios(qcStats))
+   tab2 = xtable(ratios(qcStats), label="table2")
    tcon = textConnection("TAB2", "w", local=TRUE)
    print(tab2, file=tcon)
    close(tcon)

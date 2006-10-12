@@ -18,18 +18,32 @@
 \maketitle
 
 This is a QA report for the dataset @repName@.
+For details on packages used see Section~\ref{sec:ack}.
+
+\section{Affymetrix recommended QA}
+
+In this section different statistics based on Affymetrix recommendations
+are reported. These statistics were generated using the \Rpackage{simpleaffy} 
+package. If you are not familiar with the diagnostics reported here we
+strongly recommend consulting the documentation and vignettes in the
+\Rpackage{simpleaffy} package.
 
 @TABLE1@
 
-In Table 1 we see both the average background and the scale factors for each
-array.  The average background values should be similar to each other, 
-across arrays, as should the scale factors. Scale factors should be within
-a factor of 3 of each other.
 
+In Table~\ref{table1} both the average background and the scale 
+factors, for each array, are reported.  The average background values should 
+be similar to each other, across arrays. Scale factors should be within
+a factor of 3 of each other.
 
 @TABLE2@
 
+In Table~\ref{table2} ratios of hybridization efficiency, between 3' and
+5' situated probes sets are presented. These should all be less than 3.
 
+These results are also summarized in Figure~\ref{fig:sA}. Any QA statistic
+that is shown in red is out of the manufacturer's specified boundaries
+and suggests a potential problem.
 
 
 \begin{figure}[tp]
@@ -37,8 +51,23 @@ a factor of 3 of each other.
 \includegraphics{@sA@}
 
 \caption{\label{fig:sA}%
-simpleaffy QC diagnostic plot.}
+The \Rpackage{simpleaffy} QC diagnostic plot.}
 \end{figure}
+
+\section{QA procedures from the \Rpackage{affy} package}
+
+The next series of plots were constructed using software from the 
+\Rpackage{affy} package. Readers unfamiliar with them and their
+interpretation are referred to the documentation and vignettes in
+that package.
+
+Figure~\ref{fig:hist} shows histograms (density estimates) of the raw, 
+per probe expression values, for each chip. Figure~\ref{fig:bxp}
+presents boxplots of the same data.  Note these are computed pre-background
+correction, normalization and summarization and represent the raw
+data. Arrays that look dramatically different from the others should be 
+considered for possible problems, especially if they also appear in any
+of the other diagnostics in this report.
 
 \begin{figure}[tp]
   \centering
@@ -55,12 +84,23 @@ affy boxplot.}
 \end{figure}
 
 
+In Figure~\ref{fig:rnadeg} a RNA digestion plot is computed. In this plot
+each array is represented by a single line. It is important to identify 
+any array(s) that has a slope which is very different from the others. 
+The indication is that the RNA used for that array has potentially 
+been handled quite differently from the other arrays. 
+
 \begin{figure}[tp]
   \centering
 \includegraphics{@RNAdeg@}
 \caption{\label{fig:rnadeg}%
 RNA digestion/degredation plot.}
 \end{figure}
+
+\section{QA tools from the \Rpackage{affyPLM} package}
+
+In this section we present diagnostic plots based on tools provided
+in the \Rpackage{affyPLM} package.
 
 \begin{figure}[tp]
   \centering
@@ -76,7 +116,8 @@ NUSE plot.}
 RLE plot.}
 \end{figure}
 
-\section{Acknowledgements}
+\section*{Acknowledgements}
+\label{sec:ack}
 
 This report was generated using version @affyQCVersNO@ of the 
 \Rpackage{affyQCReport}, written by Craig Parman, Conrad Halling, and
