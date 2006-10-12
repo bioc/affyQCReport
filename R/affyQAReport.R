@@ -81,10 +81,10 @@
 
    #get version numbers and sessionInfo
    pkVers =  packageDescription("affyQCReport")$Version
-   sessInfo = toLatex(sessionInfo())
+   sessInfo = paste(toLatex(sessionInfo()), collapse="\n")
 
    symVals = c(repName=repName, outfiles, TABLE1=TAB1, TABLE2=TAB2,
-         affQCVersNO= pkVers, sessionInfo=sessInfo )
+         affyQCVersNO= pkVers, sessionInfo=sessInfo )
 
    outFile = file.path(outdir, paste(repName, ".tex", sep=""))
 
