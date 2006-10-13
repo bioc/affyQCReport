@@ -23,7 +23,7 @@
 
    outf = lapply(outfiles, function(x) paste(x, output, sep=".") )
 
-   numArrays = nrow(phenoData(affyB))
+   numArrays = nrow(pData(affyB))
 
    qcStats = qc(affyB)
   
@@ -81,13 +81,13 @@
    pp1 = preprocess(affyB)
    epp1 = exprs(pp1)
    medArray = rowMedians(epp1)
-   M <- sweep(epp1,1,medianchip,FUN='-')
-   A <- 1/2*sweep(epp1,1,medianchip,FUN='+')
+   M <- sweep(epp1,1,medArray,FUN='-')
+   A <- 1/2*sweep(epp1,1,medArray,FUN='+')
 
    nfig = ceiling(numArrays/8)
    plotNames = paste("MA", 1:nfig, sep="")
    fNames = paste(plotNames, "pdf", sep=".")
-   op = par(mfrow=c(4,2)
+   op = par(mfrow=c(4,2))
    nprint = 1
    for( i in 1:nfig) {
        pdf(file=fNames[i])
