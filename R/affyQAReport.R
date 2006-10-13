@@ -76,6 +76,36 @@
    plotAffyRNAdeg(rnaDeg, cols=1)
    dev.off()
 
+   ##MA plots - 8 of these per page seems like the right number
+   ##normalize and bg correct
+   pp1 = preprocess(affyB)
+   epp1 = exprs(pp1)
+   medArray = rowMedians(epp1)
+   M <- sweep(epp1,1,medianchip,FUN='-')
+   A <- 1/2*sweep(epp1,1,medianchip,FUN='+')
+
+   nfig = ceiling(numArrays/8)
+   plotNames = paste("MA", 1:nfig, sep="")
+   fNames = paste(plotNames, "pdf", sep=".")
+   op = par(mfrow=c(4,2)
+   nprint = 1
+   for( i in 1:nfig) {
+       pdf(file=fNames[i])
+       for(j in 1:8) {
+           if(nprint <= numArrays) {
+               title <- paste(sampleNames(affyB)[nprint],
+                            "vs pseudo-median reference chip")
+               ma.plot(A[,nprint],M[,nprint], main=title, xlab="A",
+                        ylab="M", pch=".")
+               nprint <- nprint + 1
+           }
+      }
+   } 
+
+   ##FIXME: add some latex to another variable so we can put
+   ## it into the document
+
+
    ##affyPLM stuff
   dataPLM = fitPLM(affyB)
   
