@@ -42,10 +42,16 @@
    close(tcon)
    TAB2 = paste(TAB2, collapse="\n")
 
-   biobOut = data.frame(BioB = getBioB(qcStats), BioC=getBioC(qcStats),
-       BioD = getBioD(qcStats), CreX = getCreX(qcStats))
+   biobOut = qcStats@spikes
+   cn = colnames(biobOut)
+   cn = gsub("AFFX-", "", cn, fixed=TRUE)
+   cn = gsub("-3_at", "", cn, fixed=TRUE)
+   colnames(biobOut) = cn
+   bbc = qcStats@bioBCalls
+   names(bbc) = gsub(".present", "", names(bbc))
+   bbO = cbind(BioBCall = bbc, biobOut)
 
-   tab3 = xtable(biobOut, label="table3", caption="BioB and friends")
+   tab3 = xtable(bbO, label="table3", caption="BioB and friends")
    tcon = textConnection("TAB3", "w", local=TRUE)
    print(tab3, file=tcon)
    close(tcon)
