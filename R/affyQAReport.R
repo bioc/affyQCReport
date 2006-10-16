@@ -2,8 +2,14 @@
 ## could simply process that - but I think this will give us better
 ## ways to handle the errors
 
- rmQAReport = function(outdir=file.path(tempdir(), "affyQA"))
-    unlink(outdir, recursive=TRUE)
+## I started thinking that the user might specify the output type -
+##  but then hardwired pdf in places - this might be revisited
+
+ rmQAReport = function(x)
+    unlink(x$loc, recursive=TRUE)
+
+ openQAReport = function(x)
+     openPDF(file.path(x$loc, paste(x$name, ".pdf", sep="")))
 
  affyQAReport <- function(affyB, output = "pdf",
      outdir=file.path(tempdir(), "affyQA"), 
@@ -12,8 +18,15 @@
    if( !inherits(affyB, "AffyBatch") )
      stop("QA reports can only be generated for AffyBatch instances")
 
-   if( !dir.create(outdir)) 
-      stop("could not create output dir")
+   if( !file.exists(outdir) )
+     if( !dir.create(outdir)) 
+        stop("could not create output directory")
+   
+   outdir = file.path(outdir, repName)
+   if( file.exists(outdir) )
+       stop("report already exists")
+   if( !dir.create(outdir))
+        stop("could not create report directory")
 
    cd = setwd(outdir)
    on.exit(setwd(cd))
@@ -49,7 +62,7 @@
    colnames(biobOut) = cn
    bbc = qcStats@bioBCalls
    names(bbc) = gsub(".present", "", names(bbc))
-   bbO = cbind(BioBCall = bbc, biobOut)
+   bbO = cbind(BioBCall = bbc, round(biobOut, digits=3))
 
    tab3 = xtable(bbO, label="table3", caption="BioB and friends")
    tcon = textConnection("TAB3", "w", local=TRUE)
@@ -73,7 +86,7 @@
    ##RNA degredation plot
    rnaDeg = AffyRNAdeg(affyB)
    pdf(file=outf$RNAdeg)
-   plotAffyRNAdeg(rnaDeg, cols=1)
+   plotAffyRNAdeg(rnaDeg, cols=rep(1, numArrays))
    dev.off()
 
    ##MA plots - 8 of these per page seems like the right number
@@ -84,29 +97,65 @@
    M <- sweep(epp1,1,medArray,FUN='-')
    A <- 1/2*sweep(epp1,1,medArray,FUN='+')
 
+   ##FIXME: need a table of the statistics that are often shown in
+   ## an ma.plot
+
+   ##if we have 4 or 6 arrays try to make the plots larger
+   ##if lots, then 8 arrays per plot
+   if( numArrays <= 4 ) 
+      app = 4
+   else if( numArrays <= 6 )
+      app = 6
+   else
+      app = 8
+
    nfig = ceiling(numArrays/8)
+
+   ##FIXME: need a more efficient version of ma.plot - 
+   ## one that has a smaller graphics file - use hexbin?
    plotNames = paste("MA", 1:nfig, sep="")
    fNames = paste(plotNames, "pdf", sep=".")
-   op = par(mfrow=c(4,2))
    nprint = 1
    for( i in 1:nfig) {
        pdf(file=fNames[i])
-       for(j in 1:8) {
+       par(mfrow=c(app/2, 2))
+       for(j in 1:app ) {
            if(nprint <= numArrays) {
                title <- paste(sampleNames(affyB)[nprint],
-                            "vs pseudo-median reference chip")
+                            "vs pseudo-median reference")
                ma.plot(A[,nprint],M[,nprint], main=title, xlab="A",
-                        ylab="M", pch=".")
+                        ylab="M", pch=".", show.statistics=FALSE)
                nprint <- nprint + 1
            }
       }
+      dev.off()
    } 
 
-   ##FIXME: add some latex to another variable so we can put
-   ## it into the document
+  plotnames = paste("\\includegraphics{", plotNames, "}", sep="")
 
+  MALatex = paste("\\begin{figure}[tp]",
+                  "\\centering",
+		  plotnames,
+                  "\\caption{MA plots.}",
+                  "\\end{figure}", sep=" \n", collapse="\n\n")
 
-   ##affyPLM stuff
+  ##WH's distance plots here
+
+  outM = matrix(0, nrow=numArrays, ncol=numArrays)
+  for(i in 1:(numArrays-1)) 
+    for(j in (i+1):numArrays ) 
+      outM[i,j] = outM[j,i] = mad(epp1[,i] - epp1[,j])
+
+  pdf(file="MADimage.pdf")
+  image(1:numArrays, 1:numArrays, outM, xlab="", ylab="",
+       main="Distance between arrays\nMeasured by MAD on M-values")
+  dev.off()
+
+  ##affyPLM stuff
+  ##FIXME: should be able to use pp1, from above here so we
+  ## only need to do summarization, and that will make this run
+  ## quite a bit faster
+
   dataPLM = fitPLM(affyB)
   
   #Normalized Unscaled Standard Error (NUSE)
@@ -130,8 +179,9 @@
    sessInfo = paste(toLatex(sessionInfo()), collapse="\n")
 
    symVals = c(repName=repName, outfiles, TABLE1=TAB1, TABLE2=TAB2,
-         TABLE3=TAB3,
-         affyQCVersNO= pkVers, sessionInfo=sessInfo )
+         TABLE3=TAB3, MAPLOTS = MALatex, MADimage="MADimage",
+         affyQCVersNO= pkVers, sessionInfo=sessInfo,
+         numArrays=as.character(numArrays), chipName = affyB@cdfName )
 
    outFile = file.path(outdir, paste(repName, ".tex", sep=""))
 
@@ -142,6 +192,7 @@
    system(syscall)
    system(syscall)
 
-   return(list(qcStats=qcStats, loc=outdir))   
+   return(list(qcStats=qcStats, affyPLM=dataPLM, MADS=outM, loc=outdir,
+       name=repName))   
  }
 

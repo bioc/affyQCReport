@@ -18,6 +18,8 @@
 \maketitle
 
 This is a QA report for the dataset @repName@.
+The data are comprised of @numArrays@ arrays, of type \verb+@chipName@+.
+
 For details on packages used see Section~\ref{sec:ack}.
 
 \section{Affymetrix recommended QA}
@@ -117,6 +119,19 @@ but not summarized (so there is one value per probe, not one value
 per probeset). 
 
 @MAPLOTS@
+
+In Figure~\ref{fig:MADimage} a false color display of between arrays
+distances, computed as the MAD of the between array M-values is shown.
+The values on the diagonal are zero, the off-diagonals are all larger
+than the diagonal.
+
+\begin{figure}[tp]
+  \centering
+\includegraphics{@MADimage@}
+\caption{\label{fig:MADimage}%
+Pairwise differences between arrays, computed as the MAD of
+the M-values..}
+\end{figure}
 
 Figure~\ref{fig:NUSE} is a Normalized Unscaled Standard Error (NUSE) 
 plot.  Low quality arrays are those that are significantly elevated or 

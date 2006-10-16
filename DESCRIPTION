@@ -1,5 +1,5 @@
 Package: affyQCReport
-Version: 1.13.5
+Version: 1.13.6
 Title: QC Report Generation for affyBatch objects
 Author: Craig Parman <craig.parman@bifx.org>, Conrad Halling <conrad.halling@bifx.org>, Robert Gentleman
 Maintainer: Craig Parman <craig.parman@bifx.org>
