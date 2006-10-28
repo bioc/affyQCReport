@@ -70,14 +70,13 @@
    close(tcon)
    TAB3 = paste(TAB3, collapse="\n")
 
-   acol=sample(brewer.pal(12, "Set3"), numArrays, replace=(12<numArrays))
+   acol=sample(brewer.pal(8, "Dark2"), numArrays, replace=(8<numArrays))
    argb = sapply(acol, substring, first=c(2,4,6), last=c(3,5,7))
    argb = apply(argb, 2, function(h) as.integer(paste("0x", h, sep=""))/255)
 
    definecolor = paste(paste("\\definecolor{farbe", seq_along(acol),
      "}{rgb}{",argb[1,], ",",argb[2,],",",argb[3,],"}", sep=""),
      collapse="\n")
-   
    arrayNamesInColors = paste(paste("\\textcolor{farbe",
      seq_along(acol), "}{", sampleNames(affyB), "}", sep=""),
      collapse=", ")
