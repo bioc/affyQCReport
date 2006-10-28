@@ -3,6 +3,7 @@
 \usepackage{times}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{color}
 
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
 \newcommand{\Robject}[1]{{\texttt{#1}}}
@@ -11,7 +12,9 @@
 \newcommand{\Rfunarg}[1]{{\texttt{#1}}}
 \newcommand{\Rclass}[1]{{\textit{#1}}}
 
+
 \begin{document}
+@definecolor@.
 
 \title{Quality Report for Affymetrix Microarray Experiments}
 
@@ -73,8 +76,8 @@ The next series of plots were constructed using software from the
 interpretation are referred to the documentation and vignettes in
 that package.
 
-Figure~\ref{fig:hist} shows histograms (density estimates) of the raw, 
-per probe expression values, for each chip. Figure~\ref{fig:bxp}
+Figure~\ref{fig:hist} shows density estimates (histograms) of the raw, 
+per probe expression values for each chip. Figure~\ref{fig:bxp}
 presents boxplots of the same data.  Note these are computed pre-background
 correction, normalization and summarization and represent the raw
 data. Arrays that look dramatically different from the others should be 
@@ -85,14 +88,14 @@ of the other diagnostics in this report.
   \centering
 \includegraphics{@hist@}
 \caption{\label{fig:hist}%
-affy histograms.}
+Density estimates (histograms) for arrays @arrayNamesInColors@.}
 \end{figure}
 
 \begin{figure}[tp]
   \centering
 \includegraphics{@bxp@}
 \caption{\label{fig:bxp}%
-affy boxplot.}
+Boxplots for arrays @arrayNamesInColors@.}
 \end{figure}
 
 
@@ -106,7 +109,7 @@ been handled quite differently from the other arrays.
   \centering
 \includegraphics{@RNAdeg@}
 \caption{\label{fig:rnadeg}%
-RNA digestion/degredation plot.}
+RNA digestion / degradation plots for arrays @arrayNamesInColors@.}
 \end{figure}
 
 \section{QA tools from the \Rpackage{affyPLM} package}
@@ -127,10 +130,10 @@ than the diagonal.
 
 \begin{figure}[tp]
   \centering
-\includegraphics{@MADimage@}
+\includegraphics[width=\textwidth]{@MADimage@}
 \caption{\label{fig:MADimage}%
-Pairwise differences between arrays, computed as the MAD of
-the M-values..}
+Pairwise differences between arrays, computed as the median absolute 
+deviation (MAD) of the differences of the $M$-values.}
 \end{figure}
 
 Figure~\ref{fig:NUSE} is a Normalized Unscaled Standard Error (NUSE) 

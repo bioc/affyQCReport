@@ -70,45 +70,50 @@
    close(tcon)
    TAB3 = paste(TAB3, collapse="\n")
 
+   acol=sample(brewer.pal(12, "Set3"), numArrays, replace=(12<numArrays))
+   argb = sapply(acol, substring, first=c(2,4,6), last=c(3,5,7))
+   argb = apply(argb, 2, function(h) as.integer(paste("0x", h, sep=""))/255)
 
+   definecolor = paste(paste("\\definecolor{farbe", seq_along(acol),
+     "}{rgb}{",argb[1,], ",",argb[2,],",",argb[3,],"}", sep=""),
+     collapse="\n")
+   
+   arrayNamesInColors = paste(paste("\\textcolor{farbe",
+     seq_along(acol), "}{", sampleNames(affyB), "}", sep=""),
+     collapse=", ")
+   
    pdf(file=outf$sA)
    plot(qcStats)
    dev.off()
 
    pdf(file=outf$hist)
-   hist(affyB, lty=1)
+   hist(affyB, lty=1, col=acol)
    dev.off()
 
    pdf(file=outf$bxp)
-   boxplot(affyB)
+   boxplot(affyB, col=acol)
    dev.off()
 
    ##RNA degredation plot
    rnaDeg = AffyRNAdeg(affyB)
    pdf(file=outf$RNAdeg)
-   plotAffyRNAdeg(rnaDeg, cols=rep(1, numArrays))
+   plotAffyRNAdeg(rnaDeg, cols=acol, lwd=2)
    dev.off()
 
    ##MA plots - 8 of these per page seems like the right number
    ##normalize and bg correct
    pp1 = preprocess(affyB)
-   epp1 = exprs(pp1)
+   epp1 = log2(exprs(pp1))
    medArray = rowMedians(epp1)
-   M <- sweep(epp1,1,medArray,FUN='-')
-   A <- 1/2*sweep(epp1,1,medArray,FUN='+')
+   M =  epp1-medArray
+   A = (epp1+medArray)/2
 
    ##FIXME: need a table of the statistics that are often shown in
    ## an ma.plot
 
    ##if we have 4 or 6 arrays try to make the plots larger
    ##if lots, then 8 arrays per plot
-   if( numArrays <= 4 ) 
-      app = 4
-   else if( numArrays <= 6 )
-      app = 6
-   else
-      app = 8
-
+   app = 4 + 2*(sum(numArrays>c(4,6)))
    nfig = ceiling(numArrays/8)
 
    ##FIXME: need a more efficient version of ma.plot - 
@@ -116,41 +121,52 @@
    plotNames = paste("MA", 1:nfig, sep="")
    fNames = paste(plotNames, "pdf", sep=".")
    nprint = 1
-   for( i in 1:nfig) {
-       pdf(file=fNames[i])
-       par(mfrow=c(app/2, 2))
-       for(j in 1:app ) {
-           if(nprint <= numArrays) {
-               title <- paste(sampleNames(affyB)[nprint],
-                            "vs pseudo-median reference")
-               ma.plot(A[,nprint],M[,nprint], main=title, xlab="A",
-                        ylab="M", pch=".", show.statistics=FALSE)
-               nprint <- nprint + 1
-           }
-      }
-      dev.off()
+   xlim = quantile(A, probs=1e-4*c(1,-1)+c(0,1))
+   ylim = quantile(M, probs=1e-4*c(1,-1)+c(0,1))
+   for(i in seq_len(nfig)) {
+     pdf(file=fNames[i])
+     par(mfrow=c(app/2, 2))
+     for(j in seq_len(app)) {
+       if(nprint <= numArrays) {
+         smoothScatter(A[,nprint], M[,nprint],
+                       main=sampleNames(affyB)[nprint],
+                       xlab="A", ylab="M", xlim=xlim, ylim=ylim)
+         abline(h=0, col="#fe0020")
+         ## ma.plot(A[,nprint],M[,nprint], main=title, xlab="A",
+         ##         ylab="M", pch=".", show.statistics=FALSE)
+         nprint <- nprint + 1
+       }
+     }
+     dev.off()
    } 
 
-  plotnames = paste("\\includegraphics{", plotNames, "}", sep="")
-
   MALatex = paste("\\begin{figure}[tp]",
-                  "\\centering",
-		  plotnames,
-                  "\\caption{MA plots.}",
-                  "\\end{figure}", sep=" \n", collapse="\n\n")
+   "\\centering",
+   paste("\\includegraphics{", plotNames, "}", sep=""),
+   "\\caption{MA plots. A \\textit{reference array} array is calculated from",
+   "the median across arrays, and for each array $M$ and $A$ values are",
+   "calculated for the comparison to that reference.}",
+   "\\end{figure}", sep=" \n", collapse="\n\n")
 
   ##WH's distance plots here
-
   outM = matrix(0, nrow=numArrays, ncol=numArrays)
-  for(i in 1:(numArrays-1)) 
-    for(j in (i+1):numArrays ) 
+  for(i in seq_len(numArrays-1))
+    for(j in (i+1):numArrays) 
       outM[i,j] = outM[j,i] = mad(epp1[,i] - epp1[,j])
 
-  pdf(file="MADimage.pdf")
-  image(1:numArrays, 1:numArrays, outM, xlab="", ylab="",
-       main="Distance between arrays\nMeasured by MAD on M-values")
+  pdf(file="MADimage.pdf", height=6, width=(6-0.7)*1.25+0.7)
+  par(mai=c(0.7, 0.7, 0.01, 0.01))
+  layout(cbind(1,2), widths=c(4, 1))
+  imcol=colorRampPalette(brewer.pal(9, "RdPu"))(256)
+  rg=range(outM)
+  image(1:numArrays, 1:numArrays, outM, xlab="", ylab="", zlim=rg,
+       main="", col=imcol)
+  image(1, seq(rg[1], rg[2], length=length(imcol)), rbind(seq_along(imcol)),
+        xaxt="n", ylab="", col=imcol)
+  text(1, 0, "MAD", xpd=NA)
+   
   dev.off()
-
+   
   ##affyPLM stuff
   ##FIXME: should be able to use pp1, from above here so we
   ## only need to do summarization, and that will make this run
@@ -181,6 +197,7 @@
    symVals = c(repName=repName, outfiles, TABLE1=TAB1, TABLE2=TAB2,
          TABLE3=TAB3, MAPLOTS = MALatex, MADimage="MADimage",
          affyQCVersNO= pkVers, sessionInfo=sessInfo,
+         definecolor=definecolor, arrayNamesInColors=arrayNamesInColors,
          numArrays=as.character(numArrays), chipName = affyB@cdfName )
 
    outFile = file.path(outdir, paste(repName, ".tex", sep=""))
