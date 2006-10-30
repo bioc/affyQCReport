@@ -186,11 +186,11 @@
   dev.off()
    
   ##affyPLM stuff
-  ##FIXME: should be able to use pp1, from above here so we
+  ## by using pp1 from above we 
   ## only need to do summarization, and that will make this run
   ## quite a bit faster
 
-  dataPLM = fitPLM(affyB)
+  dataPLM = fitPLM(pp1, background=FALSE, normalize=FALSE)
   
   #Normalized Unscaled Standard Error (NUSE)
 
