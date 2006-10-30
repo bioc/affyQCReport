@@ -11,12 +11,20 @@
  openQAReport = function(x)
      openPDF(file.path(x$loc, paste(x$name, ".pdf", sep="")))
 
+
+
  affyQAReport <- function(affyB, output = "pdf",
      outdir=file.path(tempdir(), "affyQA"), 
      repName=deparse(substitute(affyB)) ) {
 
    if( !inherits(affyB, "AffyBatch") )
      stop("QA reports can only be generated for AffyBatch instances")
+
+   sN = sampleNames(affyB)
+   lcS = lcsuff(sN)
+   if(nchar(lcS) > 0 )
+   sN = gsub(paste(lcS, "$", sep=""), "", sN)
+   sampleNames(affyB) = sN
 
    if( !file.exists(outdir) )
      if( !dir.create(outdir)) 
@@ -49,7 +57,18 @@
    close(tcon)
    TAB1 = paste(TAB1, collapse="\n")
 
-   tab2 = xtable(t(ratios(qcStats)), label="table2")
+   ##output ratios
+
+   qcratios = ratios(qcStats)
+   rnrat = row.names(qcratios)
+   rn1 = gsub("^AFFX-", "", rnrat)
+   rn2 = strsplit(rn1, "\\.")
+   if( any(sapply(rn2, length) != 2) )
+      colnames(qcratios) = rn1
+   else
+      colnames(qcratios) = sapply(rn2, collapse="\n")
+
+   tab2 = xtable(ratios(qcStats), label="table2")
    tcon = textConnection("TAB2", "w", local=TRUE)
    print(tab2, file=tcon)
    close(tcon)
@@ -90,7 +109,7 @@
    dev.off()
 
    pdf(file=outf$bxp)
-   boxplot(affyB, col=acol)
+   boxplot(affyB, col=acol, las = 3)
    dev.off()
 
    ##RNA degredation plot
