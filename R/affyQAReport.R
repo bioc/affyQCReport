@@ -15,7 +15,10 @@
 
  affyQAReport <- function(affyB, output = "pdf",
      outdir=file.path(tempdir(), "affyQA"), 
-     repName=deparse(substitute(affyB)) ) {
+     repName) {
+   
+   if(missing(repName) )
+       repName = deparse(substitute(affyB))
 
    if( !inherits(affyB, "AffyBatch") )
      stop("QA reports can only be generated for AffyBatch instances")
