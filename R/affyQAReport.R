@@ -27,7 +27,6 @@
    lcS = lcsuff(sN)
    if(nchar(lcS) > 0 )
    sN = gsub(paste(lcS, "$", sep=""), "", sN)
-   sampleNames(affyB) = sN
 
    if( !file.exists(outdir) )
      if( !dir.create(outdir)) 
@@ -63,7 +62,7 @@
    ##output ratios
 
    qcratios = ratios(qcStats)
-   rnrat = row.names(qcratios)
+   rnrat = colnames(qcratios)
    rn1 = gsub("^AFFX-", "", rnrat)
    rn2 = strsplit(rn1, "\\.")
    if( any(sapply(rn2, length) != 2) )
@@ -71,7 +70,7 @@
    else
       colnames(qcratios) = sapply(rn2, collapse="\n")
 
-   tab2 = xtable(ratios(qcStats), label="table2")
+   tab2 = xtable(qcratios, label="table2")
    tcon = textConnection("TAB2", "w", local=TRUE)
    print(tab2, file=tcon)
    close(tcon)
@@ -100,7 +99,7 @@
      "}{rgb}{",argb[1,], ",",argb[2,],",",argb[3,],"}", sep=""),
      collapse="\n")
    arrayNamesInColors = paste(paste("\\textcolor{farbe",
-     seq_along(acol), "}{", sampleNames(affyB), "}", sep=""),
+     seq_along(acol), "}{", sN, "}", sep=""),
      collapse=", ")
    
    pdf(file=outf$sA)
@@ -150,7 +149,7 @@
      for(j in seq_len(app)) {
        if(nprint <= numArrays) {
          smoothScatter(A[,nprint], M[,nprint],
-                       main=sampleNames(affyB)[nprint],
+                       main=sN[nprint],
                        xlab="A", ylab="M", xlim=xlim, ylim=ylim)
          abline(h=0, col="#fe0020")
          ## ma.plot(A[,nprint],M[,nprint], main=title, xlab="A",
@@ -175,13 +174,17 @@
     for(j in (i+1):numArrays) 
       outM[i,j] = outM[j,i] = mad(epp1[,i] - epp1[,j])
 
+  row.names(outM) = colnames(outM) = sN
+
   pdf(file="MADimage.pdf", height=6, width=(6-0.7)*1.25+0.7)
   par(mai=c(0.7, 0.7, 0.01, 0.01))
   layout(cbind(1,2), widths=c(4, 1))
   imcol=colorRampPalette(brewer.pal(9, "RdPu"))(256)
   rg=range(outM)
   image(1:numArrays, 1:numArrays, outM, xlab="", ylab="", zlim=rg,
-       main="", col=imcol)
+       main="", col=imcol, axes=FALSE)
+  axis(1, at=1:numArrays, labels=sN, las=3)
+  axis(2, at=1:numArrays, labels=sN, las=2)
   image(1, seq(rg[1], rg[2], length=length(imcol)), rbind(seq_along(imcol)),
         xaxt="n", ylab="", col=imcol)
   text(1, 0, "MAD", xpd=NA)
@@ -198,13 +201,13 @@
   #Normalized Unscaled Standard Error (NUSE)
 
   pdf(file=outf$RLE)
-  Mbox(dataPLM, ylim = c(-1, 1), names = NULL, col="lightblue",
-   whisklty=0, staplelty=0, main="RLE")
+  Mbox(dataPLM, ylim = c(-1, 1), names = sN, col="lightblue",
+   whisklty=0, staplelty=0, main="RLE", las=3)
   dev.off()
 
    pdf(file=outf$NUSE)
-   boxplot(dataPLM, ylim = c(0.95, 1.5), names = NULL,
-        outline = FALSE, col="lightblue", main="NUSE")
+   boxplot(dataPLM, ylim = c(0.95, 1.5), names = sN,
+        outline = FALSE, col="lightblue", main="NUSE", las=3)
    dev.off()
 
    ##write the LaTeX
