@@ -1,53 +1,4 @@
-
-
-## grid/lattice version of smoothScatter
-
-panel.smoothScatter <- 
-    function (x, y = NULL,
-              nbin = 128,
-              bandwidth,
-              colramp = colorRampPalette(c("white", brewer.pal(9, "Blues"))),
-              nrpoints = 100,
-              transformation = function(x) x^0.25, 
-              pch = ".", 
-              cex = 1,
-              ...) 
-{
-    x <- as.numeric(x)
-    y <- as.numeric(y)
-    if (!is.numeric(nrpoints) | (nrpoints < 0) | (length(nrpoints) != 1)) 
-        stop("'nrpoints' should be numeric scalar with value >= 0.")
-    xy <- xy.coords(x, y)
-    x <- cbind(xy$x, xy$y)[!(is.na(xy$x) | is.na(xy$y)), ]
-    map <- geneplotter:::.smoothScatterCalcDensity(x, nbin, bandwidth)
-    xm <- map$x1
-    ym <- map$x2
-    dens <- map$fhat
-    dens <- array(transformation(dens), dim = dim(dens))
-    panel.levelplot(x = rep(xm, length(ym)),
-                    y = rep(ym, each = length(xm)),
-                    z = as.numeric(dens),
-                    subscripts = TRUE,
-                    at = seq(from = 0, to = 1.01 * max(dens), length = 257),
-                    col.regions = colramp(256),
-                    ...)
-    if (nrpoints != 0)
-    {
-        stopifnot(length(xm) == nrow(dens), length(ym) == ncol(dens))
-        ixm <- round((x[, 1] - xm[1])/(xm[length(xm)] - xm[1]) * 
-                     (length(xm) - 1))
-        iym <- round((x[, 2] - ym[1])/(ym[length(ym)] - ym[1]) * 
-                     (length(ym) - 1))
-        idens <- dens[1 + iym * length(xm) + ixm]
-        nrpoints <- min(nrow(x), ceiling(nrpoints))
-        sel <- order(idens, decreasing = FALSE)[1:nrpoints]
-        panel.points(x[sel, 1:2], pch = pch, cex = cex, col = "black")
-    }
-    panel.abline(h=0, col="#fe0020")
-}
-
-
-
+#Copyright R. Gentleman, 2006, all rights reserved
 
 
 ##in some ways it would be better to have a .Rnw template, so that one
@@ -66,7 +17,7 @@ panel.smoothScatter <-
 
 
  affyQAReport <- function(affyB, output = "pdf",
-     outdir=file.path(tempdir(), "affyQA"), 
+     outdir=file.path(getwd(), "affyQA"), overwrite = FALSE,
      repName) {
    
    if(missing(repName) )
@@ -86,7 +37,11 @@ panel.smoothScatter <-
    
    outdir = file.path(outdir, repName)
    if( file.exists(outdir) )
-       stop("report already exists")
+      if( overwrite )
+          unlink(outdir, recursive=TRUE)
+      else
+          stop("report already exists")
+
    if( !dir.create(outdir))
         stop("could not create report directory")
 
