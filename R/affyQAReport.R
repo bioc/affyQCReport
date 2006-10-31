@@ -60,7 +60,7 @@
    dfout = data.frame(AvBg = avbg(qcStats), ScaleF=sfs(qcStats),
       PerCPres=percent.present(qcStats))
 
-   tab1 = xtable(dfout, label="table1")
+   tab1 = xtable(dfout, label="table1", caption="Background and scale factors")
    tcon = textConnection("TAB1", "w", local=TRUE)
    print(tab1, file=tcon)
    close(tcon)
@@ -77,7 +77,7 @@
    else
       colnames(qcratios) = sapply(rn2, paste, collapse="\n")
 
-   tab2 = xtable(qcratios, label="table2")
+   tab2 = xtable(qcratios, label="table2", caption="QC ratios")
    tcon = textConnection("TAB2", "w", local=TRUE)
    print(tab2, file=tcon)
    close(tcon)
@@ -278,6 +278,11 @@
    outFile = file.path(outdir, paste(repName, ".tex", sep=""))
 
    copySubstitute(texTemp, outFile, symbolValues = symVals)
+
+   ##fix directory structure for latex/win32
+
+   if(.Platform$OS.type == "windows")
+     outFile = shortPathName(outFile)
 
    ##set up call to pdflatex and run it twice for x-refs
    syscall = paste("pdflatex", outFile)
