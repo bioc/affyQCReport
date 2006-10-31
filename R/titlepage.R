@@ -1,7 +1,6 @@
 
-         titlePage<- function(object)
 
-
+titlePage<- function(object)
 {
 #plot.new()
 
