@@ -1,3 +1,55 @@
+
+
+## grid/lattice version of smoothScatter
+
+panel.smoothScatter <- 
+    function (x, y = NULL,
+              nbin = 128,
+              bandwidth,
+              colramp = colorRampPalette(c("white", brewer.pal(9, "Blues"))),
+              nrpoints = 100,
+              transformation = function(x) x^0.25, 
+              pch = ".", 
+              cex = 1,
+              ...) 
+{
+    x <- as.numeric(x)
+    y <- as.numeric(y)
+    if (!is.numeric(nrpoints) | (nrpoints < 0) | (length(nrpoints) != 1)) 
+        stop("'nrpoints' should be numeric scalar with value >= 0.")
+    xy <- xy.coords(x, y)
+    x <- cbind(xy$x, xy$y)[!(is.na(xy$x) | is.na(xy$y)), ]
+    map <- geneplotter:::.smoothScatterCalcDensity(x, nbin, bandwidth)
+    xm <- map$x1
+    ym <- map$x2
+    dens <- map$fhat
+    dens <- array(transformation(dens), dim = dim(dens))
+    panel.levelplot(x = rep(xm, length(ym)),
+                    y = rep(ym, each = length(xm)),
+                    z = as.numeric(dens),
+                    subscripts = TRUE,
+                    at = seq(from = 0, to = 1.01 * max(dens), length = 257),
+                    col.regions = colramp(256),
+                    ...)
+    if (nrpoints != 0)
+    {
+        stopifnot(length(xm) == nrow(dens), length(ym) == ncol(dens))
+        ixm <- round((x[, 1] - xm[1])/(xm[length(xm)] - xm[1]) * 
+                     (length(xm) - 1))
+        iym <- round((x[, 2] - ym[1])/(ym[length(ym)] - ym[1]) * 
+                     (length(ym) - 1))
+        idens <- dens[1 + iym * length(xm) + ixm]
+        nrpoints <- min(nrow(x), ceiling(nrpoints))
+        sel <- order(idens, decreasing = FALSE)[1:nrpoints]
+        panel.points(x[sel, 1:2], pch = pch, cex = cex, col = "black")
+    }
+    panel.abline(h=0, col="#fe0020")
+}
+
+
+
+
+
 ##in some ways it would be better to have a .Rnw template, so that one
 ## could simply process that - but I think this will give us better
 ## ways to handle the errors
@@ -65,10 +117,10 @@
    rnrat = colnames(qcratios)
    rn1 = gsub("^AFFX-", "", rnrat)
    rn2 = strsplit(rn1, "\\.")
-   if( any(sapply(rn2, length) != 2) )
+   if( any(sapply (rn2, length) != 2) ) 
       colnames(qcratios) = rn1
    else
-      colnames(qcratios) = sapply(rn2, collapse="\n")
+      colnames(qcratios) = sapply(rn2, paste, collapse="\n")
 
    tab2 = xtable(qcratios, label="table2")
    tcon = textConnection("TAB2", "w", local=TRUE)
@@ -140,27 +192,70 @@
    ## one that has a smaller graphics file - use hexbin?
    plotNames = paste("MA", 1:nfig, sep="")
    fNames = paste(plotNames, "pdf", sep=".")
-   nprint = 1
+   ## nprint = 1
    xlim = quantile(A, probs=1e-4*c(1,-1)+c(0,1))
    ylim = quantile(M, probs=1e-4*c(1,-1)+c(0,1))
-   for(i in seq_len(nfig)) {
-     pdf(file=fNames[i])
-     par(mfrow=c(app/2, 2))
-     for(j in seq_len(app)) {
-       if(nprint <= numArrays) {
-         smoothScatter(A[,nprint], M[,nprint],
-                       main=sN[nprint],
-                       xlab="A", ylab="M", xlim=xlim, ylim=ylim)
-         abline(h=0, col="#fe0020")
-         ## ma.plot(A[,nprint],M[,nprint], main=title, xlab="A",
-         ##         ylab="M", pch=".", show.statistics=FALSE)
-         nprint <- nprint + 1
-       }
-     }
-     dev.off()
-   } 
 
-  MALatex = paste("\\begin{figure}[tp]",
+
+   dummy.df <-
+       data.frame(sN = factor(sN, levels = sN),
+                  x = seq_along(sN),
+                  y = seq_along(sN))
+
+   trobj <-
+       xyplot(y ~ x | sN, dummy.df,
+              xlim = xlim,
+              ylim = ylim,
+              xlab = "A",
+              ylab = "M",
+### possible substitute for xlim and ylim:
+              
+##               prepanel = function(x, y, ...) {
+##                   x <- A[, x]
+##                   y <- M[, y]
+##                   list(xlim = range(x, na.rm = TRUE),
+##                        ylim = range(y, na.rm = TRUE),
+##                        dx = diff(x),
+##                        dy = diff(y))
+##               },
+
+              panel = function(x, y, ...) {
+                  x <- A[, x]
+                  y <- M[, y]
+                  panel.smoothScatter(x, y, ...)
+              },
+
+              layout = c(app/2, 2, 1))
+
+   id.firstpage <- seq_len(app)
+   
+   for(i in seq_len(nfig))
+   {
+       pdf(file = fNames[i])
+       id.thispage <- (i-1) * app + id.firstpage
+       id.thispage <- id.thispage[id.thispage <= numArrays]
+
+       ## print(id.thispage)
+       ## print(trobj[id.thispage]) # should work, bug?
+       print(update(trobj, index.cond = list(id.thispage)))
+
+##      par(mfrow=c(app/2, 2))
+##      for(j in seq_len(app)) {
+##          if(nprint <= numArrays) {
+##              smoothScatter(A[,nprint], M[,nprint],
+##                            main=sN[nprint],
+##                            xlab="A", ylab="M", xlim=xlim, ylim=ylim)
+##              abline(h=0, col="#fe0020")
+##              ## ma.plot(A[,nprint],M[,nprint], main=title, xlab="A",
+##              ##         ylab="M", pch=".", show.statistics=FALSE)
+##              nprint <- nprint + 1
+##          }
+##      }
+
+       dev.off()
+   }
+
+   MALatex = paste("\\begin{figure}[tp]",
    "\\centering",
    paste("\\includegraphics{", plotNames, "}", sep=""),
    "\\caption{MA plots. A \\textit{reference array} array is calculated from",
@@ -168,6 +263,7 @@
    "calculated for the comparison to that reference.}",
    "\\end{figure}", sep=" \n", collapse="\n\n")
 
+   
   ##WH's distance plots here
   outM = matrix(0, nrow=numArrays, ncol=numArrays)
   for(i in seq_len(numArrays-1))
@@ -212,7 +308,7 @@
 
    ##write the LaTeX
    texTemp = system.file("Templates/affyQAtemplate.tex",
-		   package="affyQCReport")
+   package="affyQCReport")
 
    #get version numbers and sessionInfo
    pkVers =  packageDescription("affyQCReport")$Version
