@@ -30,6 +30,8 @@
    lcS = lcsuff(sN)
    if(nchar(lcS) > 0 )
    sN = gsub(paste(lcS, "$", sep=""), "", sN)
+   ##this is expensive, but we need the names
+   sampleNames(affyB) = sN
 
    if( !file.exists(outdir) )
      if( !dir.create(outdir)) 
@@ -66,6 +68,17 @@
    close(tcon)
    TAB1 = paste(TAB1, collapse="\n")
 
+   ##since these quantities are meant to be similar to 
+   ##each other, it makes some sense to look at ratios
+   ## of the minimum to the maximum - these will indicate
+   ## potential problems
+   CompStats = sapply(dfout, function(x) max(x)/min(x))
+   CS = paste("$", round(CompStats, 3), "$")
+   txtstrs = c("Since this ratio is less than 3 there is unlikely to be a problem.  ", "Since this ratio is larger than 3 there is a potential problem.  ")
+
+   CSoutstrs = ifelse(CompStats<=3, txtstrs[1], txtstrs[2])
+   names(CSoutstrs) = NULL
+  
    ##output ratios
 
    qcratios = ratios(qcStats)
@@ -273,7 +286,10 @@
          TABLE3=TAB3, MAPLOTS = MALatex, MADimage="MADimage",
          affyQCVersNO= pkVers, sessionInfo=sessInfo,
          definecolor=definecolor, arrayNamesInColors=arrayNamesInColors,
-         numArrays=as.character(numArrays), chipName = affyB@cdfName )
+         numArrays=as.character(numArrays), chipName = affyB@cdfName,
+         BGRATIO = CS[1], SFRATIO = CS[2], PPRATIO = CS[3],
+         BGRATIOTEXT = CSoutstrs[1], SFRATIOTEXT=CSoutstrs[2],
+         PPRATIOTEXT = CSoutstrs[3] )
 
    outFile = file.path(outdir, paste(repName, ".tex", sep=""))
 
