@@ -27,7 +27,7 @@
      stop("QA reports can only be generated for AffyBatch instances")
 
    sN = sampleNames(affyB)
-   lcS = lcsuff(sN)
+   lcS = lcSuffix(sN)
    if(nchar(lcS) > 0 )
    sN = gsub(paste(lcS, "$", sep=""), "", sN)
    ##this is expensive, but we need the names
