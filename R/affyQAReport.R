@@ -62,7 +62,8 @@
    dfout = data.frame(AvBg = avbg(qcStats), ScaleF=sfs(qcStats),
       PerCPres=percent.present(qcStats))
 
-   tab1 = xtable(dfout, label="table1", caption="Background and scale factors")
+   tab1 = xtable(dfout, label="table1",
+   caption="Average background, scale factor and percent present calls.")
    tcon = textConnection("TAB1", "w", local=TRUE)
    print(tab1, file=tcon)
    close(tcon)
@@ -85,12 +86,17 @@
    rnrat = colnames(qcratios)
    rn1 = gsub("^AFFX-", "", rnrat)
    rn2 = strsplit(rn1, "\\.")
-   if( any(sapply (rn2, length) != 2) ) 
-      colnames(qcratios) = rn1
+   grumpf = if(any(listLen(rn2)!=2)) 
+      rn1
    else
-      colnames(qcratios) = sapply(rn2, paste, collapse="\n")
-
-   tab2 = xtable(qcratios, label="table2", caption="QC ratios")
+      sapply(rn2, paste, collapse="\n")
+   colnames(qcratios)=letters[seq_len(ncol(qcratios))]
+   
+   tab2 = xtable(qcratios, label="table2", caption=paste(
+      "3'/5' ratios. ",
+      paste(colnames(qcratios), ") ", grumpf, sep="", collapse=" "),
+      ".", sep=""))
+   
    tcon = textConnection("TAB2", "w", local=TRUE)
    print(tab2, file=tcon)
    close(tcon)
@@ -134,7 +140,7 @@
    boxplot(affyB, col=acol, las = 3)
    dev.off()
 
-   ##RNA degredation plot
+   ##RNA degradation plot
    rnaDeg = AffyRNAdeg(affyB)
    pdf(file=outf$RNAdeg)
    plotAffyRNAdeg(rnaDeg, cols=acol, lwd=2)
@@ -143,21 +149,17 @@
    ##MA plots - 8 of these per page seems like the right number
    ##normalize and bg correct
    pp1 = preprocess(affyB)
-   epp1 = log2(exprs(pp1))
-   medArray = rowMedians(epp1)
-   M =  epp1-medArray
-   A = (epp1+medArray)/2
-
-   ##FIXME: need a table of the statistics that are often shown in
-   ## an ma.plot
+   epp = log2(exprs(pp1))
+   colnames(epp) = sN
+   medArray = rowMedians(epp)
+   M =  epp-medArray
+   A = (epp+medArray)/2
 
    ##if we have 4 or 6 arrays try to make the plots larger
    ##if lots, then 8 arrays per plot
    app = 4 + 2*(sum(numArrays>c(4,6)))
    nfig = ceiling(numArrays/8)
 
-   ##FIXME: need a more efficient version of ma.plot - 
-   ## one that has a smaller graphics file - use hexbin?
    plotNames = paste("MA", 1:nfig, sep="")
    fNames = paste(plotNames, "pdf", sep=".")
    ## nprint = 1
@@ -224,27 +226,24 @@
    }
 
    MALatex = paste("\\begin{figure}[tp]",
-   "\\centering",
+   "\\begin{center}",
    paste("\\includegraphics{", plotNames, "}", sep=""),
-   "\\caption{MA plots. A \\textit{reference array} array is calculated from",
+   "\\caption{\\label{fig:ma}MA plots.",
+   "A \\textit{reference array} array is calculated from",
    "the median across arrays, and for each array $M$ and $A$ values are",
    "calculated for the comparison to that reference.}",
-   "\\end{figure}", sep=" \n", collapse="\n\n")
+   "\\end{center}\\end{figure}", sep=" \n", collapse="\n\n")
 
    
   ##WH's distance plots here
-  outM = matrix(0, nrow=numArrays, ncol=numArrays)
-  for(i in seq_len(numArrays-1))
-    for(j in (i+1):numArrays) 
-      outM[i,j] = outM[j,i] = mad(epp1[,i] - epp1[,j])
-
-  row.names(outM) = colnames(outM) = sN
+   
+  outM = dist2(epp)
 
   pdf(file="MADimage.pdf", height=6, width=(6-0.7)*1.25+0.7)
   par(mai=c(0.7, 0.7, 0.01, 0.01))
   layout(cbind(1,2), widths=c(4, 1))
   imcol=colorRampPalette(brewer.pal(9, "RdPu"))(256)
-  rg=range(outM)
+  rg=range(outM, na.rm=TRUE)
   image(1:numArrays, 1:numArrays, outM, xlab="", ylab="", zlim=rg,
        main="", col=imcol, axes=FALSE)
   axis(1, at=1:numArrays, labels=sN, las=3)

@@ -1,5 +1,5 @@
 Package: affyQCReport
-Version: 1.13.13
+Version: 1.13.14
 Title: QC Report Generation for affyBatch objects
 Author: Craig Parman <craig.parman@bifx.org>, Conrad Halling <conrad.halling@bifx.org>, Robert Gentleman
 Maintainer: Craig Parman <craig.parman@bifx.org>
@@ -10,5 +10,5 @@ Description: This package creates a QC report for an AffyBatch object.
   of a set of arrays in an AffyBatch object.
 License: LGPL version 2 or newer
 biocViews: Microarray,OneChannel,QualityControl
-Collate: arrayReport.R correlation.R border1.R border2.R titlepage.R signaldist.R affyQAReport.R
+Collate: arrayReport.R correlation.R border1.R border2.R titlepage.R signaldist.R affyQAReport.R dist2.R
 

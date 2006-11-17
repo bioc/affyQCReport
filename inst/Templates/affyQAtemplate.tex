@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{color}
+\usepackage{amsmath} 
 
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
 \newcommand{\Robject}[1]{{\texttt{#1}}}
@@ -15,95 +16,186 @@
 
 \begin{document}
 
-\title{Quality Report for Affymetrix Microarray Experiments}
+\title{Quality Report for Affymetrix Microarray Experiment @repName@}
 
 \maketitle
+\tableofcontents
 
-This is a QA report for the dataset @repName@.
+\vspace{1.08cm}
+This is a quality assessment report for the dataset \textit{@repName@}.  
 The data are comprised of @numArrays@ arrays, of type \verb+@chipName@+.
 
-For details on packages used see Section~\ref{sec:ack}.
+For details on the software packages that were used to produce this
+report see Section~\ref{sec:ack}.
 
-\section{Affymetrix recommended QA}
+%------------------------------------------------------
+\section{The quality metrics recommended by Affymetrix}
+%------------------------------------------------------
 
-In this section different statistics based on Affymetrix recommendations
-are reported. These statistics were generated using the \Rpackage{simpleaffy} 
-package. If you are not familiar with the diagnostics reported here we
-strongly recommend consulting the documentation and vignettes in the
-\Rpackage{simpleaffy} package.
+Affymetrix recommends a number of quality metrics that can be 
+calculated for each array.
+
+\begin{itemize}
+\item Average background intensity, scale factors and
+percent of genes called present. These are shown in 
+Table~\ref{table1}. The values should be similar across arrays. 
+In the presented data, the
+ratio of the largest to the smallest value of average background is
+@BGRATIO@.  @BGRATIOTEXT@
+Among the scale factors, the ratio of the maximum to the minimum 
+value is @SFRATIO@.  @SFRATIOTEXT@ 
+For the percent present calls, it is @PPRATIO@. @PPRATIOTEXT@
+
+\item Ratios of hybridization efficiency between 
+probes at the 3' and 5' ends of some control probe sets. 
+These are displayed in Table~\ref{table2}. They
+should all be less than 3.
+
+\item External control probes. The protocols suggest
+that labelled cRNAs be added during sample
+preparation.  These are BioB, BioC, BioD and CreX and are derived from
+Bacillus subtiliis. Nothing else should bind to their
+probesets. The results for these quantities are reported in
+Table~\ref{table3}. It is intended that BioB be spiked in at the lower
+limit of detection and that BioC, BioD and CreX be spiked in at higher
+concentrations. If BioB is routinely absent, then there may be a
+problem with sensitivity.
+\end{itemize}
 
 @TABLE1@
 
-
-In Table~\ref{table1} the average background, scale 
-factors, and percent of genes called present, for each array, are reported.  
-The average background values should 
-be similar to each other, across arrays, and the
-ratio of the minimum value to the maximum is @BGRATIO@.  @BGRATIOTEXT@
-Scale factors should be within a factor of 3 of each other, and the
-ratio of the minimum value to the maximum value is @SFRATIO@.  @SFRATIOTEXT@
-Similarly percent present calls should be similar, and for the data
-provided the ratio of the minimum value to the maximum is @PPRATIO@.  @PPRATIOTEXT@
-
 @TABLE2@
-
-In Table~\ref{table2} ratios of hybridization efficiency, between 3' and
-5' situated probes sets are presented. These should all be less than 3.
-
-Additional, labelled cRNAs, are sometimes added during sample preparation. 
-These are BioB, BioC, BioD and CreX and are derived from Bacillus subtiliis 
-and nothing else should bind to their probesets. The results for these
-quantities are reported in Table\ref{table3}. It is intended that BioB be spiked
-in at the lower limit of detection and that BioC, BioD and CreX be
-spiked in at higher concentrations. If BioB is routinely absent, then there
-may be a problem with sensitivity.
 
 @TABLE3@
 
-These results are also summarized in Figure~\ref{fig:sA}. Any QA statistic
+These quality metrics are also summarized in 
+Figure~\ref{fig:sA}. Any metric
 that is shown in red is out of the manufacturer's specified boundaries
 and suggests a potential problem.
 
 
 \begin{figure}[tp]
-  \centering
-\includegraphics{@sA@}
-
+\begin{center}
+\includegraphics[width=0.9\textwidth]{@sA@}
 \caption{\label{fig:sA}%
-The \Rpackage{simpleaffy} QC diagnostic plot.}
+Quality metrics overview diagnostic plot.}
+\end{center}
 \end{figure}
 
-\section{QA procedures from the \Rpackage{affy} package}
+The quality metrics reported in this Section and Figure~\ref{fig:sA}
+were generated using the \Rpackage{simpleaffy} package. For further
+information, we recommend the documentation and vignettes
+in the \Rpackage{simpleaffy} package.
 
-The next series of plots were constructed using software from the 
-\Rpackage{affy} package. Readers unfamiliar with them and their
-interpretation are referred to the documentation and vignettes in
-that package.
 
-Figure~\ref{fig:hist} shows density estimates (histograms) of the raw, 
-per probe expression values for each chip. Figure~\ref{fig:bxp}
-presents boxplots of the same data.  Note these are computed pre-background
-correction, normalization and summarization and represent the raw
-data. Arrays that look dramatically different from the others should be 
-considered for possible problems, especially if they also appear in any
-of the other diagnostics in this report.
+%--------------------------------------------------
+\section{Per array intensity distributions}
+%--------------------------------------------------
+\subsection{Before normalization}
+%--------------------------------------------------
+The quality metrics in this section look at the distribution of the
+(raw, unnormalized) feature intensities for each array.
+Figure~\ref{fig:hist} shows density estimates (histograms),
+and Figure~\ref{fig:bxp} presents boxplots of the same data.  
+Arrays whose distributions are very different from the others should be 
+considered for possible problems.
 
 @definecolor@
 
 \begin{figure}[tp]
-  \centering
+\begin{center}
 \includegraphics{@hist@}
 \caption{\label{fig:hist}%
 Density estimates (histograms) for arrays @arrayNamesInColors@.}
+\end{center}
 \end{figure}
 
 \begin{figure}[tp]
-  \centering
+\begin{center}
 \includegraphics{@bxp@}
 \caption{\label{fig:bxp}%
 Boxplots for arrays @arrayNamesInColors@.}
+\end{center}
 \end{figure}
 
+%--------------------------------------------------
+\subsection{After normalization}
+%--------------------------------------------------
+@MAPLOTS@
+
+$MA$-plots are useful for pairwise comparisons between arrays.
+$M$ and $A$ are defined as 
+\begin{eqnarray*}
+M&=&\log_2(X_1)-\log_2(X_2)=\log_2\frac{X_1}{X_2},\\
+A&=&\frac{1}{2}\left(\log_2(X_1)+\log_2(X_2)\right)=\log_2\sqrt{X_1X_2},\\
+\end{eqnarray*}
+where $X_1$ and $X_2$ are the vectors of normalized intensities of two arrays,
+on the original data scale (i.\,e.\ not logarithm-transformed).
+
+For the $MA$-plots shown in Figure~\ref{fig:ma},
+the data were background corrected and normalized, 
+but not summarized (so there is one value per probe, not one value
+per probeset). Rather than comparing each array to every other array, 
+here we compare each array to a single median ``pseudo''-array.
+
+Typically, we expect the mass of the distribution in an $MA$-plot to
+be concentrated along the $M=0$ axis, and there should be no trend in
+the mean of $M$ as a function of $A$. 
+
+Note that a bigger width of the plot of the $M$-distribution at the
+lower end of the $A$ scale does not necessarily imply that the
+variance of the $M$-distribution is larger at the lower end of the
+$A$ scale: the visual impression might simply be caused by the fact
+that there is more data at the lower end of the $A$ scale. To
+visualize whether there is a trend in the variance of $M$ as a function of $A$,
+consider plotting $M$ versus $\mbox{rank}(A)$.
+
+%--------------------------------------------------
+\section{Between array comparisons}
+%--------------------------------------------------
+\begin{figure}[tp]
+  \centering
+\includegraphics[width=\textwidth]{@MADimage@}
+\caption{\label{fig:MADimage}%
+Pairwise differences between arrays, computed as the median absolute 
+deviation (MAD) of the differences of the $M$-values.}
+\end{figure}
+
+Figure~\ref{fig:MADimage} shows a false color display of between arrays
+distances, computed as the MAD of the $M$-values of each pair of
+arrays.
+\begin{equation*}
+d_{ij} = c\cdot \displaystyle \operatornamewithlimits{median}_{m} 
+  \left| x_{mi}- x_{mj}\right|.
+\end{equation*}
+Here, $x_{mi}$ is the normalized intensity value of the $m$-th probe
+on the $i$-th array, on the original data scale. $c=1.4826$ is a constant factor
+that ensures consistency with the empirical variance for Normally
+distributed data (see manual page of the \textit{mad} function in R).
+ 
+This plot can serve to detect outlier arrays.
+Consider the following decomposition of $x_{mi}$:
+\begin{equation}
+x_{mi}= z_m + \beta_{mi} + \varepsilon_{mi},
+\end{equation}
+where $z_m$ is the probe effect for probe $m$ (the same across all
+arrays), $\varepsilon_{mi}$ are i.i.d. random variables with mean zero
+and $\beta_{mi}$ is such that for any array $i$, the majority of values
+$\beta_{mi}$ are negligibly small (i.\,e.\ close to zero).
+$\beta_{mi}$ represents differential expression effects.  In this
+model, all values $d_{ij}$ are (in expectation) the same, namely
+$\sqrt{2}$ times the standard deviation of $\varepsilon_{mi}$.  Arrays
+whose distance matrix entries are way different give cause for
+suspicion.
+
+%--------------------------------------------------
+\section{Other plots (degradation and affyPLM)}
+%--------------------------------------------------
+
+In this section we present diagnostic plots based on tools provided
+in the \Rpackage{affyPLM} package.
+
+\textit{\textbf{FIXME - somebody need to explain these.}}
 
 In Figure~\ref{fig:rnadeg} a RNA digestion plot is computed. In this plot
 each array is represented by a single line. It is important to identify 
@@ -118,29 +210,6 @@ been handled quite differently from the other arrays.
 RNA digestion / degradation plots for arrays @arrayNamesInColors@.}
 \end{figure}
 
-\section{QA tools from the \Rpackage{affyPLM} package}
-
-In this section we present diagnostic plots based on tools provided
-in the \Rpackage{affyPLM} package.
-
-For the MA plots the data were background corrected and normalized 
-but not summarized (so there is one value per probe, not one value
-per probeset). 
-
-@MAPLOTS@
-
-In Figure~\ref{fig:MADimage} a false color display of between arrays
-distances, computed as the MAD of the between array M-values is shown.
-The values on the diagonal are zero, the off-diagonals are all larger
-than the diagonal.
-
-\begin{figure}[tp]
-  \centering
-\includegraphics[width=\textwidth]{@MADimage@}
-\caption{\label{fig:MADimage}%
-Pairwise differences between arrays, computed as the median absolute 
-deviation (MAD) of the differences of the $M$-values.}
-\end{figure}
 
 Figure~\ref{fig:NUSE} is a Normalized Unscaled Standard Error (NUSE) 
 plot.  Low quality arrays are those that are significantly elevated or 
@@ -165,6 +234,8 @@ NUSE plot.}
 RLE plot.}
 \end{figure}
 
+
+
 \section*{Acknowledgements}
 \label{sec:ack}
 
@@ -176,7 +247,7 @@ by C. J. Miller and the \Rpackage{affyPLM} package written by B. M. Bolstad.
 W. Huber contributed substantially to the format and functions.
 D. Sarkar contributed the lattice graphics for the MA plots.
 
-SessionInformation: 
+\section*{SessionInformation: }
 @sessionInfo@
 
 \end{document}
