@@ -3,7 +3,7 @@ Version: 1.13.14
 Title: QC Report Generation for affyBatch objects
 Author: Craig Parman <craig.parman@bifx.org>, Conrad Halling <conrad.halling@bifx.org>, Robert Gentleman
 Maintainer: Craig Parman <craig.parman@bifx.org>
-Depends: Biobase (>=1.13.16), affy, simpleaffy, xtable, affyPLM, RColorBrewer, geneplotter
+Depends: Biobase (>=1.13.16), affy, simpleaffy, xtable, affyPLM, RColorBrewer, geneplotter, lattice
 Suggests: tkWidgets (>= 1.5.23), affydata (>= 1.4.1)
 Description: This package creates a QC report for an AffyBatch object.
   The report is intended to allow the user to quickly assess the quality
