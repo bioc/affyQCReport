@@ -23,7 +23,7 @@
                    #win.graph()
                   layout(matrix(c(1,1,1,2,1,1,1,2,1,1,1,2,3,3,3,4), 4, 4, byrow = TRUE))
                      
-                  c<-cor(object@exprs[ ,order],method = "spearman")
+                  c<-cor(exprs(object)[ ,order],method = "spearman")
                   
                    image(c ,xaxt="n",yaxt="n",xlab="Array Index"
                         ,ylab="Array Index" , main="Array-Array Intensity Correlation")
