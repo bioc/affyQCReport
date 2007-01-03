@@ -3,7 +3,7 @@
                   {
 
                    ArrayIndex = as.character(1:length(sampleNames(object)))
-			 pmat<-as.matrix(pData(object@phenoData))
+			 pmat<-as.matrix(pData(phenoData(object)))
                    phenodepth<-min(ncol(pmat),3)  #allow up to three levels for sorting
                    
                    order<-switch(phenodepth+1, 
