@@ -2,7 +2,9 @@ library("affyQCReport")
 library("affydata")
 data("Dilution")
 
-xxx = affyQAReport(Dilution)
+nD = updateObject(Dilution)
+
+xxx = affyQAReport(nD)
 openQAReport(xxx)
 
 ## to delete it

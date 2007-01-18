@@ -173,7 +173,10 @@ on the $i$-th array, on the original data scale. $c=1.4826$ is a constant factor
 that ensures consistency with the empirical variance for Normally
 distributed data (see manual page of the \textit{mad} function in R).
  
-This plot can serve to detect outlier arrays.
+Figure~\ref{fig:MADimage} is an exploratory plot that can 
+help detecting (a) outlier arrays and (b) batch effects. The analysis 
+of this plot is subjective and context-dependent: there are no
+objective numeric thresholds when to call something an outlier.
 Consider the following decomposition of $x_{mi}$:
 \begin{equation}
 x_{mi}= z_m + \beta_{mi} + \varepsilon_{mi},
@@ -187,6 +190,12 @@ model, all values $d_{ij}$ are (in expectation) the same, namely
 $\sqrt{2}$ times the standard deviation of $\varepsilon_{mi}$.  Arrays
 whose distance matrix entries are way different give cause for
 suspicion.
+
+If there is an outlier array, you will expect to see vertical and horizontal
+stripes in the plot of darker color. Batch effects that are aligned to
+the order of the arrays as they are read in can be seen as blocks
+along the diagonal. If you see neither, you are lucky, and the data
+passes this quality criterion.
 
 %--------------------------------------------------
 \section{Other plots (degradation and affyPLM)}
