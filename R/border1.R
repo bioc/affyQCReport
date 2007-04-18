@@ -70,13 +70,13 @@
                   layout(matrix(c(1,1,2,2,1,1,2,2,3,3,3,3), 3, 4, byrow = TRUE))
                   
                     
-                  boxplot(data.frame(intensity(object)[on,]),
+                  boxplot(as.data.frame(intensity(object)[on,]),
                           xlab="Array Index",ylab="Intensity",main="Positive Border Elements",
                           names=ArrayIndex
                           )
                  
 
-                  boxplot(data.frame(intensity(object)[off,]),
+                  boxplot(as.data.frame(intensity(object)[off,]),
                           xlab="Array Index",ylab="Intensity",main="Negative Border Elements",
                            names=ArrayIndex
                           )
