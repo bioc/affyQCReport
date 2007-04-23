@@ -20,6 +20,8 @@ openQAReport(x)
   \item{overwrite}{Whether an existing report, with the same name, should
       be overwritten.}
   \item{repName}{ A character string indicating the name of the report. }
+  \item{x}{A character string containing the location of the directory 
+    holding the report.}
 }
 \details{
  A wide variety of tools from different packages are used, in conjunction 
