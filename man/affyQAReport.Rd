@@ -32,6 +32,9 @@ data.
  This package only works for Affymetrix data. It requires a working LaTeX
 implementation and so is not likely to work on Windows platforms, and
 in some cases on OS X unless the user has installed these tools.
+
+  Sample names that have an underscore in them have it replaced by a dot.
+Underscore causes a number of problems with Latex, if it is not escaped.
 }
 \value{
  A list with the following components is returned.

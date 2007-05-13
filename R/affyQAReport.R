@@ -30,6 +30,8 @@
    lcS = lcSuffix(sN)
    if(nchar(lcS) > 0 )
    sN = gsub(paste(lcS, "$", sep=""), "", sN)
+   ##we need to replace names with _ with .
+   sN = gsub("_", ".", sN)
    ##this is expensive, but we need the names
    sampleNames(affyB) = sN
 
