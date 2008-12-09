@@ -10,7 +10,7 @@ borderQC1(object)
 }
 
 \arguments{
-  \item{object} {An object of class \code{\link[affy:AffyBatch-class]{AffyBatch}} .}
+  \item{object}{An object of class \code{\link[affy:AffyBatch-class]{AffyBatch}} .}
   
 }
 \details{
