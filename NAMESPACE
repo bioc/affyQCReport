@@ -1,0 +1,19 @@
+importMethodsFrom(affy, boxplot, hist, image, intensity, Mbox)
+importMethodsFrom(Biobase, exprs, pData, phenoData, rowMedians,
+                  sampleNames, "sampleNames<-")
+importMethodsFrom(simpleaffy, avbg, percent.present, qc, ratios, sfs)
+importFrom(affy, AffyRNAdeg, plotAffyRNAdeg)
+importFrom(affyPLM, fitPLM, preprocess)
+importFrom(Biobase, copySubstitute, lcSuffix, listLen, openPDF)
+importFrom(genefilter, dist2)
+importFrom(graphics, abline, axis, layout, legend, par, plot,
+           plot.new, plot.window, polygon, text)
+importFrom(grDevices, colorRampPalette, dev.off, pdf)
+importFrom(lattice, panel.smoothScatter, xyplot)
+importFrom(RColorBrewer, brewer.pal)
+importFrom(stats, cor, quantile, update)
+importFrom(utils, packageDescription, sessionInfo, toLatex)
+importFrom(xtable, xtable)
+
+export(affyQAReport, borderQC1, borderQC2, correlationPlot, openQAReport,
+       QCReport, rmQAReport, signalDist, titlePage)
