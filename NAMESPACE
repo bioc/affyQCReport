@@ -1,12 +1,12 @@
 importMethodsFrom(affy, boxplot, hist, image, intensity, Mbox)
 importMethodsFrom(Biobase, exprs, pData, phenoData, rowMedians,
                   sampleNames, "sampleNames<-")
-importMethodsFrom(simpleaffy, avbg, percent.present, qc, ratios, sfs)
+importMethodsFrom(simpleaffy, avbg, percent.present, qc, ratios, sfs, plot)
 importFrom(affy, AffyRNAdeg, plotAffyRNAdeg)
 importFrom(affyPLM, fitPLM, preprocess)
 importFrom(Biobase, copySubstitute, lcSuffix, listLen, openPDF)
 importFrom(genefilter, dist2)
-importFrom(graphics, abline, axis, layout, legend, par, plot,
+importFrom(graphics, abline, axis, layout, legend, par,
            plot.new, plot.window, polygon, text)
 importFrom(grDevices, colorRampPalette, dev.off, pdf)
 importFrom(lattice, panel.smoothScatter, xyplot)
