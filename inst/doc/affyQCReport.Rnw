@@ -131,7 +131,7 @@ Each row shows the \%present, average background, scale factors and GAPDH / $\be
 \begin{itemize}
 \item GAPDH $3^\prime :5^\prime$ values are plotted as circles. According to Affymetrix they should be about 1. GAPDH values that are considered potential outlier (ratio > 1.25) are coloured red, otherwise they are blue.
 \item $\beta$-actin, $3^\prime :5^\prime$ ratios are plotted as triangles. Because this is a longer gene, the recommendation is for the $3^\prime :5^\prime$ ratios to be below 3; values below 3 are coloured blue, those above, red.
-\item The blue stripe in the image represents the range where scale factors are within 3-fold of the mean for all chips. Scale factors are plotted as a line from the centre line of the image. A line to the left corresponds to a down-scaling, to the right, to an up-scaling. If any scale factors fall outside this ‘3-fold region’, they are all coloured red, otherwise they are blue.
+\item The blue stripe in the image represents the range where scale factors are within 3-fold of the mean for all chips. Scale factors are plotted as a line from the centre line of the image. A line to the left corresponds to a down-scaling, to the right, to an up-scaling. If any scale factors fall outside this 3-fold region, they are all coloured red, otherwise they are blue.
 \item $\%$ present and average background, are listed to left of the figure.
 
 \end{itemize}
