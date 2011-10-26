@@ -21,7 +21,7 @@
 
                  leftmean   <-mean(intensity(object)[left,1])
                  rightmean  <-mean(intensity(object)[right,1])
-                 topmean    <-mean(intensity(object)[top,1]) 
+                 topmean    <-mean(intensity(object)[top,1])
                  bottommean <-mean(intensity(object)[bottom,1])
 
                  lefton     <- left[intensity(object)[left,1]  >1.2*leftmean]
@@ -40,22 +40,22 @@
              #calculate center of intensity
                   
                  
-                 rmon<-mean(data.frame(intensity(object)[righton,]))
-                 lmon<-mean(data.frame(intensity(object)[lefton,]))
+                 rmon<-colMeans(data.frame(intensity(object)[righton,]))
+                 lmon<-colMeans(data.frame(intensity(object)[lefton,]))
                  xcmon<- (rmon - lmon)/(rmon+lmon)
                     
-                 tmon<-mean(data.frame(intensity(object)[topon,]))
-                 bmon<-mean(data.frame(intensity(object)[bottomon,]))
+                 tmon<-colMeans(data.frame(intensity(object)[topon,]))
+                 bmon<-colMeans(data.frame(intensity(object)[bottomon,]))
                  ycmon<- (tmon-bmon)/(tmon+bmon)
  
 
 
-                 rmoff<-mean(data.frame(intensity(object)[rightoff,]))
-                 lmoff<-mean(data.frame(intensity(object)[leftoff,]))
+                 rmoff<-colMeans(data.frame(intensity(object)[rightoff,]))
+                 lmoff<-colMeans(data.frame(intensity(object)[leftoff,]))
                  xcmoff<- (rmoff - lmoff)/(rmoff+lmoff)
                     
-                 tmoff<-mean(data.frame(intensity(object)[topoff,]))
-                 bmoff<-mean(data.frame(intensity(object)[bottomoff,]))
+                 tmoff<-colMeans(data.frame(intensity(object)[topoff,]))
+                 bmoff<-colMeans(data.frame(intensity(object)[bottomoff,]))
                  ycmoff<- (tmoff-bmoff)/(tmoff+bmoff)
 
 

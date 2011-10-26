@@ -27,7 +27,7 @@
                  topon      <- top[intensity(object)[top,1]   >1.2*topmean]
                  bottomon   <- bottom[intensity(object)[bottom,1]>1.2*bottommean]
  
-		     leftoff     <- left[intensity(object)[left,1] < .8*leftmean]
+		 leftoff     <- left[intensity(object)[left,1] < .8*leftmean]
                  rightoff    <- right[intensity(object)[right,1] <.8*rightmean]
                  topoff      <- top[intensity(object)[top,1]   <.8*topmean]
                  bottomoff   <- bottom[intensity(object)[bottom,1]<.8*bottommean]
@@ -38,22 +38,22 @@
              #calculate center of intensity
                   
                  
-                 rmon<-mean(data.frame(intensity(object)[righton,]))
-                 lmon<-mean(data.frame(intensity(object)[lefton,]))
+                 rmon<-colMeans(data.frame(intensity(object)[righton,]))
+                 lmon<-colMeans(data.frame(intensity(object)[lefton,]))
                  xcmon<- (rmon - lmon)/(rmon+lmon)
                     
-                 tmon<-mean(data.frame(intensity(object)[topon,]))
-                 bmon<-mean(data.frame(intensity(object)[bottomon,]))
+                 tmon<-colMeans(data.frame(intensity(object)[topon,]))
+                 bmon<-colMeans(data.frame(intensity(object)[bottomon,]))
                  ycmon<- (tmon-bmon)/(tmon+bmon)
  
 
 
-                 rmoff<-mean(data.frame(intensity(object)[rightoff,]))
-                 lmoff<-mean(data.frame(intensity(object)[leftoff,]))
+                 rmoff<-colMeans(data.frame(intensity(object)[rightoff,]))
+                 lmoff<-colMeans(data.frame(intensity(object)[leftoff,]))
                  xcmoff<- (rmoff - lmoff)/(rmoff+lmoff)
                     
-                 tmoff<-mean(data.frame(intensity(object)[topoff,]))
-                 bmoff<-mean(data.frame(intensity(object)[bottomoff,]))
+                 tmoff<-colMeans(data.frame(intensity(object)[topoff,]))
+                 bmoff<-colMeans(data.frame(intensity(object)[bottomoff,]))
                  ycmoff<- (tmoff-bmoff)/(tmoff+bmoff)
 
 
